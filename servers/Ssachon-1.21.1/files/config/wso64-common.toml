@@ -1,0 +1,6 @@
+not_only_stack_of_16 = false
+# Default: 64
+# Range: 1 ~ 99
+size = 64
+potions = false
+food = false

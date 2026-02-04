@@ -1,0 +1,6 @@
+[
+  {"version":1},
+  {"ingredient":{"id":"minecraft:spruce_trapdoor"},"type":"item_stack","bookmarkType":"INGREDIENT"},
+  {"ingredient":{"id":"minecraft:bedrock"},"type":"item_stack","bookmarkType":"INGREDIENT"},
+  {"ingredient":{"id":"minecraft:short_grass"},"type":"item_stack","bookmarkType":"INGREDIENT"}
+]
