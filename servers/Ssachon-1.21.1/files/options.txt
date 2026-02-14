@@ -48,7 +48,7 @@ mouseSensitivity:0.5
 damageTiltStrength:1.0
 highContrast:false
 narratorHotkey:true
-resourcePacks:["vanilla","fabric","mod_resources","generated/fragmentum_layer","builtin/add_pack_finders_test","file/CYML.zip"]
+resourcePacks:["vanilla","fabric","mod_resources","generated/fragmentum_layer","builtin/add_pack_finders_test","file/CYML-싸촌.zip"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:ko_kr
@@ -224,3 +224,4 @@ modelPart_right_sleeve:true
 modelPart_left_pants_leg:true
 modelPart_right_pants_leg:true
 modelPart_hat:true
+
