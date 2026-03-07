@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>챈경 (챈나경도) - 게임 기획서</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --police-blue: #0a84ff;
+  --police-glow: #00d4ff;
+  --thief-red: #ff3b5c;
+  --thief-glow: #ff6b8a;
+  --gold: #ffd700;
+  --gold-glow: #ffea80;
+  --bg-dark: #0a0a12;
+  --bg-card: rgba(255,255,255,0.04);
+  --text-main: #e8e8f0;
+  --text-dim: #8888aa;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px;
+  background: rgba(10,10,18,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 18px;
+  background: linear-gradient(135deg, var(--police-blue), var(--thief-red));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-dots { display:flex; gap:8px; }
+.nav-dot {
+  width:10px; height:10px; border-radius:50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer; transition: all 0.3s;
+  border: none; outline: none;
+}
+.nav-dot.active { background: var(--police-blue); box-shadow: 0 0 10px var(--police-blue); }
+.nav-dot:hover { background: rgba(255,255,255,0.4); }
+.nav-counter {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px; color: var(--text-dim);
+}
+
+/* ── SLIDES ── */
+.slide {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 100px 48px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── SLIDE 1: TITLE ── */
+.slide-title { flex-direction: column; text-align: center; }
+.slide-title::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 30% 40%, rgba(10,132,255,0.15), transparent),
+    radial-gradient(ellipse 500px 350px at 70% 60%, rgba(255,59,92,0.12), transparent);
+}
+.grid-bg {
+  position:absolute; inset:0; opacity:0.06;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.title-badge {
+  display:inline-block; padding:8px 24px; border-radius:30px;
+  border:1px solid rgba(255,215,0,0.3);
+  background: rgba(255,215,0,0.08);
+  font-size:14px; font-weight:500; color: var(--gold);
+  letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:28px; position:relative;
+  animation: fadeSlideUp 0.8s ease both;
+}
+.main-title {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: clamp(64px, 10vw, 130px);
+  line-height: 1.1;
+  position:relative;
+  animation: fadeSlideUp 0.8s 0.15s ease both;
+}
+.main-title .blue { color: var(--police-blue); text-shadow: 0 0 40px rgba(10,132,255,0.4); }
+.main-title .red { color: var(--thief-red); text-shadow: 0 0 40px rgba(255,59,92,0.4); }
+.title-sub {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--text-dim); margin-top:20px;
+  font-weight:300; letter-spacing:1px;
+  position:relative;
+  animation: fadeSlideUp 0.8s 0.3s ease both;
+}
+.title-divider {
+  width:80px; height:3px; margin:32px auto;
+  background: linear-gradient(90deg, var(--police-blue), var(--thief-red));
+  border-radius:3px; position:relative;
+  animation: fadeSlideUp 0.8s 0.4s ease both;
+}
+.title-tagline {
+  font-size:18px; color:var(--text-main); font-weight:400;
+  max-width:500px; line-height:1.7; position:relative;
+  animation: fadeSlideUp 0.8s 0.5s ease both;
+}
+
+/* ── SLIDE 2: OVERVIEW ── */
+.slide-overview { flex-direction: column; gap: 48px; }
+.section-header {
+  text-align:center; position:relative;
+}
+.section-number {
+  font-family:'Orbitron',sans-serif; font-size:13px;
+  color:var(--police-blue); letter-spacing:4px;
+  margin-bottom:8px;
+}
+.section-title {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px,5vw,56px);
+}
+.overview-grid {
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap:24px; max-width:1100px; width:100%;
+}
+.overview-card {
+  background: var(--bg-card);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px; padding:32px;
+  transition: all 0.4s ease;
+  position:relative; overflow:hidden;
+}
+.overview-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--police-blue), var(--thief-red));
+  opacity:0; transition:opacity 0.3s;
+}
+.overview-card:hover { transform:translateY(-4px); border-color:rgba(255,255,255,0.12); }
+.overview-card:hover::before { opacity:1; }
+.card-icon {
+  width:48px; height:48px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; margin-bottom:16px;
+}
+.card-icon.police { background:rgba(10,132,255,0.15); }
+.card-icon.thief { background:rgba(255,59,92,0.15); }
+.card-icon.treasure { background:rgba(255,215,0,0.15); }
+.card-icon.escape { background:rgba(0,212,255,0.15); }
+.card-title { font-weight:700; font-size:18px; margin-bottom:8px; }
+.card-desc { color:var(--text-dim); font-size:14px; line-height:1.7; }
+
+/* ── SLIDE 3: RULES ── */
+.slide-rules { flex-direction:column; gap:40px; }
+.rules-container { display:flex; gap:32px; max-width:1100px; width:100%; flex-wrap:wrap; justify-content:center; }
+.rule-panel {
+  flex:1; min-width:300px; max-width:520px;
+  border-radius:20px; padding:36px; position:relative;
+  overflow:hidden;
+}
+.rule-panel.police-panel {
+  background: linear-gradient(160deg, rgba(10,132,255,0.1), rgba(10,132,255,0.02));
+  border:1px solid rgba(10,132,255,0.2);
+}
+.rule-panel.thief-panel {
+  background: linear-gradient(160deg, rgba(255,59,92,0.1), rgba(255,59,92,0.02));
+  border:1px solid rgba(255,59,92,0.2);
+}
+.panel-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 16px; border-radius:20px;
+  font-size:13px; font-weight:700; letter-spacing:1px;
+  margin-bottom:20px;
+}
+.police-panel .panel-badge { background:rgba(10,132,255,0.2); color:var(--police-blue); }
+.thief-panel .panel-badge { background:rgba(255,59,92,0.2); color:var(--thief-red); }
+.panel-title { font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:28px; margin-bottom:20px; }
+.rule-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.rule-list li {
+  display:flex; align-items:flex-start; gap:12px;
+  font-size:15px; line-height:1.6; color:var(--text-dim);
+}
+.rule-list li .bullet {
+  width:6px; height:6px; border-radius:50%; margin-top:8px; flex-shrink:0;
+}
+.police-panel .bullet { background:var(--police-blue); box-shadow:0 0 8px var(--police-blue); }
+.thief-panel .bullet { background:var(--thief-red); box-shadow:0 0 8px var(--thief-red); }
+
+/* ── SLIDE 4: MAP INFO ── */
+.slide-map { flex-direction:column; gap:40px; }
+.stats-row {
+  display:flex; gap:24px; flex-wrap:wrap; justify-content:center;
+  max-width:1000px; width:100%;
+}
+.stat-block {
+  text-align:center; padding:28px 36px;
+  background: var(--bg-card);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px; min-width:180px;
+  flex:1;
+}
+.stat-value {
+  font-family:'Orbitron',sans-serif;
+  font-size:42px; font-weight:900;
+  margin-bottom:6px;
+}
+.stat-value.blue { color:var(--police-blue); text-shadow:0 0 20px rgba(10,132,255,0.3); }
+.stat-value.red { color:var(--thief-red); text-shadow:0 0 20px rgba(255,59,92,0.3); }
+.stat-value.gold { color:var(--gold); text-shadow:0 0 20px rgba(255,215,0,0.3); }
+.stat-value.cyan { color:var(--police-glow); text-shadow:0 0 20px rgba(0,212,255,0.3); }
+.stat-label { font-size:14px; color:var(--text-dim); font-weight:500; }
+
+.player-table {
+  max-width:700px; width:100%;
+  border-collapse:collapse;
+  background: var(--bg-card);
+  border-radius:16px; overflow:hidden;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.player-table th {
+  padding:16px 24px; font-size:13px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim); border-bottom:1px solid rgba(255,255,255,0.06);
+  font-weight:500;
+}
+.player-table td {
+  padding:14px 24px; text-align:center; font-size:15px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.player-table tr:last-child td { border-bottom:none; }
+.player-table .label-cell { text-align:left; font-weight:600; }
+
+/* ── SLIDE 5 & 6: ITEMS ── */
+.slide-items { flex-direction:column; gap:36px; }
+.items-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap:16px; max-width:1100px; width:100%;
+}
+.item-card {
+  padding:24px; border-radius:14px;
+  background: var(--bg-card);
+  border:1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s;
+  position:relative;
+}
+.item-card:hover { transform:translateY(-3px); border-color:rgba(255,255,255,0.12); }
+.item-name {
+  font-weight:700; font-size:16px; margin-bottom:6px;
+  display:flex; align-items:center; gap:8px;
+}
+.item-name .emoji { font-size:20px; }
+.item-effect {
+  font-size:13px; color:var(--text-dim); line-height:1.6;
+}
+.item-tag {
+  display:inline-block; padding:2px 10px; border-radius:8px;
+  font-size:11px; font-weight:600; margin-top:8px;
+}
+.tag-instant { background:rgba(255,59,92,0.15); color:var(--thief-red); }
+.tag-duration { background:rgba(10,132,255,0.15); color:var(--police-blue); }
+.tag-passive { background:rgba(255,215,0,0.15); color:var(--gold); }
+
+/* ── SLIDE 7: API ── */
+.slide-api { flex-direction:column; gap:36px; }
+.api-tiers {
+  display:flex; gap:24px; flex-wrap:wrap; justify-content:center;
+  max-width:1000px; width:100%;
+}
+.api-tier {
+  flex:1; min-width:260px; max-width:320px;
+  border-radius:18px; padding:32px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.api-tier.tier-1 {
+  background: linear-gradient(160deg, rgba(136,136,170,0.12), rgba(136,136,170,0.03));
+  border:1px solid rgba(136,136,170,0.2);
+}
+.api-tier.tier-2 {
+  background: linear-gradient(160deg, rgba(10,132,255,0.12), rgba(10,132,255,0.03));
+  border:1px solid rgba(10,132,255,0.25);
+}
+.api-tier.tier-3 {
+  background: linear-gradient(160deg, rgba(255,215,0,0.12), rgba(255,215,0,0.03));
+  border:1px solid rgba(255,215,0,0.25);
+}
+.tier-cost {
+  font-family:'Orbitron',sans-serif;
+  font-size:36px; font-weight:900; margin-bottom:4px;
+}
+.tier-1 .tier-cost { color:var(--text-dim); }
+.tier-2 .tier-cost { color:var(--police-blue); }
+.tier-3 .tier-cost { color:var(--gold); }
+.tier-label {
+  font-size:12px; color:var(--text-dim); letter-spacing:2px;
+  text-transform:uppercase; margin-bottom:16px;
+}
+.tier-effect {
+  font-size:14px; line-height:1.7; color:var(--text-main);
+  padding:12px 16px; border-radius:10px;
+  background: rgba(255,255,255,0.03);
+}
+.api-note {
+  max-width:600px; text-align:center;
+  padding:16px 24px; border-radius:12px;
+  background: rgba(255,59,92,0.08);
+  border:1px solid rgba(255,59,92,0.15);
+  font-size:14px; color:var(--thief-red);
+}
+
+/* ── SLIDE 8: MINIGAME ── */
+.slide-mini { flex-direction:column; gap:36px; }
+.mini-box {
+  max-width:700px; width:100%;
+  padding:40px; border-radius:20px;
+  background: linear-gradient(160deg, rgba(255,215,0,0.08), rgba(255,215,0,0.02));
+  border:1px solid rgba(255,215,0,0.2);
+  text-align:center;
+}
+.mini-box h3 {
+  font-family:'Noto Sans KR',sans-serif;
+  font-weight:700;
+  font-size:26px; margin-bottom:16px; color:var(--gold);
+}
+.mini-box p { color:var(--text-dim); font-size:15px; line-height:1.8; }
+.flow-steps {
+  display:flex; align-items:center; justify-content:center;
+  gap:16px; flex-wrap:wrap; margin-top:24px;
+}
+.flow-step {
+  padding:12px 24px; border-radius:12px;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  font-size:14px; font-weight:600;
+}
+.flow-arrow { color:var(--gold); font-size:20px; }
+
+/* ── SLIDE 9: END ── */
+.slide-end { flex-direction:column; text-align:center; }
+.end-title {
+  font-family:'Noto Sans KR',sans-serif;
+  font-weight:700;
+  font-size: clamp(40px,7vw,80px);
+  background: linear-gradient(135deg, var(--police-blue), var(--gold), var(--thief-red));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.end-sub {
+  font-size:18px; color:var(--text-dim); margin-top:16px;
+  font-weight:300; letter-spacing:1px;
+}
+
+/* ── UTILITY ── */
+.highlight-blue { color:var(--police-blue); }
+.highlight-red { color:var(--thief-red); }
+.highlight-gold { color:var(--gold); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlideUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.reveal {
+  opacity:0; transform:translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity:1; transform:translateY(0);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg-dark); }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:3px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+  .slide { padding:90px 20px 40px; }
+  .rules-container { flex-direction:column; align-items:center; }
+  .rule-panel { max-width:100%; }
+  .stats-row { flex-direction:column; align-items:center; }
+  .stat-block { width:100%; }
+  .api-tiers { flex-direction:column; align-items:center; }
+  .api-tier { max-width:100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">CHAENGYEONG</div>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-counter" id="navCounter">01 / 09</div>
+</nav>
+
+<!-- SLIDE 1: TITLE -->
+<section class="slide slide-title" id="s1">
+  <div class="grid-bg"></div>
+  <div class="title-badge">GAME DESIGN DOCUMENT</div>
+  <h1 class="main-title">
+    <span class="blue">챈</span><span class="red">경</span>
+  </h1>
+  <p class="title-sub">챈 나 경 도 — 경찰 vs 도둑</p>
+  <div class="title-divider"></div>
+  <p class="title-tagline">경찰은 도둑을 모두 잡아넣고,<br>도둑은 보물을 훔쳐 탈출하라!</p>
+</section>
+
+<!-- SLIDE 2: OVERVIEW -->
+<section class="slide slide-overview" id="s2">
+  <div class="section-header reveal">
+    <div class="section-number">01</div>
+    <h2 class="section-title">게임 개요</h2>
+  </div>
+  <div class="overview-grid">
+    <div class="overview-card reveal">
+      <div class="card-icon police">🚔</div>
+      <div class="card-title">경찰 팀</div>
+      <div class="card-desc">전용 무기와 전용 옷을 착용한 경찰이 도둑을 모두 감옥에 가두면 승리합니다.</div>
+    </div>
+    <div class="overview-card reveal">
+      <div class="card-icon thief">🦹</div>
+      <div class="card-title">도둑 팀</div>
+      <div class="card-desc">보물을 10개 이상 확보한 뒤, 탈출구로 탈출하면 승리합니다. 감옥 열쇠로 동료를 구출할 수 있습니다.</div>
+    </div>
+    <div class="overview-card reveal">
+      <div class="card-icon treasure">💎</div>
+      <div class="card-title">보물 시스템</div>
+      <div class="card-desc">맵 곳곳에 13개의 보물이 배치됩니다. 보물 획득 시 데바데 스타일 미니게임을 클리어해야 합니다.</div>
+    </div>
+    <div class="overview-card reveal">
+      <div class="card-icon escape">🚪</div>
+      <div class="card-title">탈출 시스템</div>
+      <div class="card-desc">맵에 2개의 탈출구가 존재합니다. 보물 달성 후 탈출구로 이동하면 도둑 팀이 승리합니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: RULES -->
+<section class="slide slide-rules" id="s3">
+  <div class="section-header reveal">
+    <div class="section-number">02</div>
+    <h2 class="section-title">승리 조건</h2>
+  </div>
+  <div class="rules-container">
+    <div class="rule-panel police-panel reveal">
+      <div class="panel-badge">🛡️ POLICE</div>
+      <div class="panel-title">경찰 승리 조건</div>
+      <ul class="rule-list">
+        <li><span class="bullet"></span><span>모든 도둑을 <strong class="highlight-blue">감옥</strong>에 가두면 승리</span></li>
+        <li><span class="bullet"></span><span>전용 무기 및 전용 옷 착용</span></li>
+        <li><span class="bullet"></span><span>아이템 파밍을 통해 다양한 능력 사용 가능</span></li>
+        <li><span class="bullet"></span><span>도둑이 보물을 모두 탈출시키기 전에 제압해야 함</span></li>
+      </ul>
+    </div>
+    <div class="rule-panel thief-panel reveal">
+      <div class="panel-badge">🎭 THIEF</div>
+      <div class="panel-title">도둑 승리 조건</div>
+      <ul class="rule-list">
+        <li><span class="bullet"></span><span>보물 <strong class="highlight-red">10개</strong>를 모두 확보</span></li>
+        <li><span class="bullet"></span><span><strong class="highlight-red">탈출구</strong>로 성공적으로 탈출</span></li>
+        <li><span class="bullet"></span><span>감옥 열쇠로 잡힌 동료 구출 가능</span></li>
+        <li><span class="bullet"></span><span>미니게임 클리어로 보물 획득 (데바데 스타일)</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: MAP & PLAYERS -->
+<section class="slide slide-map" id="s4">
+  <div class="section-header reveal">
+    <div class="section-number">03</div>
+    <h2 class="section-title">맵 & 인원</h2>
+  </div>
+  <div class="stats-row reveal">
+    <div class="stat-block">
+      <div class="stat-value gold">13</div>
+      <div class="stat-label">보물 위치 수 (10+3)</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value gold">10</div>
+      <div class="stat-label">달성 필요 보물</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value cyan">2</div>
+      <div class="stat-label">탈출구</div>
+    </div>
+  </div>
+  <table class="player-table reveal">
+    <thead>
+      <tr><th></th><th>총 인원</th><th>경찰</th><th>도둑</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-cell">최소 인원</td>
+        <td><strong>15명</strong></td>
+        <td class="highlight-blue"><strong>4명</strong></td>
+        <td class="highlight-red"><strong>11명</strong></td>
+      </tr>
+      <tr>
+        <td class="label-cell">최대 인원</td>
+        <td><strong>20명</strong></td>
+        <td class="highlight-blue"><strong>5명</strong></td>
+        <td class="highlight-red"><strong>15명</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SLIDE 5: POLICE ITEMS -->
+<section class="slide slide-items" id="s5">
+  <div class="section-header reveal">
+    <div class="section-number">04</div>
+    <h2 class="section-title"><span class="highlight-blue">경찰</span> 아이템</h2>
+  </div>
+  <div class="items-grid">
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">⛓️</span> 즉시감옥권</div>
+      <div class="item-effect">대상 우클릭 시 해당 도둑을 즉시 감옥에 가둡니다.</div>
+      <span class="item-tag tag-instant">즉시 발동</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">📡</span> 도둑위치노출권</div>
+      <div class="item-effect">랜덤한 도둑 한 명의 위치를 발광 효과로 노출시킵니다.</div>
+      <span class="item-tag tag-instant">즉시 발동</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🔫</span> 총</div>
+      <div class="item-effect">5발 장전 · 피격 데미지: 10</div>
+      <span class="item-tag tag-passive">무기</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: THIEF ITEMS -->
+<section class="slide slide-items" id="s6">
+  <div class="section-header reveal">
+    <div class="section-number">05</div>
+    <h2 class="section-title"><span class="highlight-red">도둑</span> 아이템</h2>
+  </div>
+  <div class="items-grid">
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🛡️</span> 데미지 방어권</div>
+      <div class="item-effect">5초간 모든 데미지를 무효화합니다.</div>
+      <span class="item-tag tag-duration">5초</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">💨</span> 이속 증가권</div>
+      <div class="item-effect">5초간 이동 속도가 크게 증가합니다.</div>
+      <span class="item-tag tag-duration">5초</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🐜</span> 소인화</div>
+      <div class="item-effect">5초간 몸이 작아져 숨기 쉬워집니다.</div>
+      <span class="item-tag tag-duration">5초</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🔑</span> 감옥 열쇠</div>
+      <div class="item-effect">감옥에 갇힌 동료를 구출할 수 있습니다.</div>
+      <span class="item-tag tag-instant">즉시 발동</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">❤️‍🩹</span> 체력 회복</div>
+      <div class="item-effect">일정량의 체력을 즉시 회복합니다.</div>
+      <span class="item-tag tag-instant">즉시 발동</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🪤</span> 함정</div>
+      <div class="item-effect">설치 시 즉시 발동. 밟은 경찰에게 디버프를 부여합니다.</div>
+      <span class="item-tag tag-instant">즉시 발동</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">✨</span> 위치 노출 (발광)</div>
+      <div class="item-effect">상대 역할(경찰)에게 자신의 위치를 발광으로 노출합니다.</div>
+      <span class="item-tag tag-passive">디버프</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">🦍</span> 거인화</div>
+      <div class="item-effect">5초간 몸이 거대해집니다.</div>
+      <span class="item-tag tag-duration">5초</span>
+    </div>
+    <div class="item-card reveal">
+      <div class="item-name"><span class="emoji">💫</span> 기절</div>
+      <div class="item-effect">대상을 5초간 기절시킵니다.</div>
+      <span class="item-tag tag-duration">5초</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: API SYSTEM -->
+<section class="slide slide-api" id="s7">
+  <div class="section-header reveal">
+    <div class="section-number">06</div>
+    <h2 class="section-title">API 시스템</h2>
+  </div>
+  <div class="api-note reveal">
+    ⚠️ 감옥에 있을 때는 발동 불가 · 지속시간 10초
+  </div>
+  <div class="api-tiers">
+    <div class="api-tier tier-1 reveal">
+      <div class="tier-cost">400</div>
+      <div class="tier-label">API</div>
+      <div class="tier-effect">
+        <strong>랜덤 디버프</strong><br>
+        구속 · 발광 · 실명 · 멀미 중 하나 발동
+      </div>
+    </div>
+    <div class="api-tier tier-2 reveal">
+      <div class="tier-cost">500</div>
+      <div class="tier-label">API</div>
+      <div class="tier-effect">
+        <strong>랜덤 버프</strong><br>
+        이속 증가 · 소인화 · 투명 (5초) 중 하나 발동
+      </div>
+    </div>
+    <div class="api-tier tier-3 reveal">
+      <div class="tier-cost">1000</div>
+      <div class="tier-label">API</div>
+      <div class="tier-effect">
+        <strong>랜덤 텔레포트</strong><br>
+        맵 내 랜덤 위치로 즉시 이동
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: MINIGAME -->
+<section class="slide slide-mini" id="s8">
+  <div class="section-header reveal">
+    <div class="section-number">07</div>
+    <h2 class="section-title">미니게임 시스템</h2>
+  </div>
+  <div class="mini-box reveal">
+    <h3>💎 보물 획득 미니게임</h3>
+    <p>
+      보물 위치에 도달하면 <strong class="highlight-gold">데바데(Dead by Daylight)</strong> 스타일의
+      미니게임이 시작됩니다.<br>
+      미니게임을 성공적으로 클리어해야 보물을 획득할 수 있습니다.<br>
+      클리어 실패 시 보물은 사라지지 않으며 재도전이 가능합니다.
+    </p>
+    <div class="flow-steps">
+      <div class="flow-step">🗺️ 보물 위치 도달</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">🎮 미니게임 시작</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">✅ 미니게임 성공</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">💎 보물 획득!</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9: END -->
+<section class="slide slide-end" id="s9">
+  <div class="grid-bg"></div>
+  <div class="reveal">
+    <h2 class="end-title">COMING SOON</h2>
+    <p class="end-sub">챈경 — 경찰과 도둑의 숨막히는 대결</p>
+  </div>
+</section>
+
+<script>
+// ── Slide tracking ──
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+const navDotsContainer = document.getElementById('navDots');
+const navCounter = document.getElementById('navCounter');
+
+// Create nav dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.addEventListener('click', () => {
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  });
+  navDotsContainer.appendChild(dot);
+});
+const dots = navDotsContainer.querySelectorAll('.nav-dot');
+
+// ── Intersection Observer for slides ──
+const slideObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = [...slides].indexOf(entry.target);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      navCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(s => slideObserver.observe(s));
+
+// ── Reveal on scroll ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
