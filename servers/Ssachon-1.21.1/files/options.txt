@@ -48,7 +48,7 @@ mouseSensitivity:0.5
 damageTiltStrength:1.0
 highContrast:false
 narratorHotkey:true
-resourcePacks:["vanilla","fabric","mod_resources","generated/fragmentum_layer","builtin/add_pack_finders_test","file/CYML-싸촌.zip"]
+resourcePacks:["vanilla","fabric","mod_resources","generated/fragmentum_layer","builtin/add_pack_finders_test","file/CYML-싸촌.zip","file/generated.zip"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:ko_kr
